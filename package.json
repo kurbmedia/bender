@@ -1,0 +1,30 @@
+{ 
+    "name": "bender", 
+    "description": "Titanium app development with node.js and CoffeeScript", 
+    "version": "0.0.1", 
+    "url": "http://github.com/kurbmedia/bender/", 
+    "author": "kurb media, llc.", 
+    "engines": ["node >= 0.8.8"], 
+    "repository": {
+        "type" : "git",
+        "url"  : "https://github.com/kurbmedia/bender"
+    },
+    
+    "dependencies"     : {
+      "underscore"     : "latest",
+      "coffee-script"  : "latest",
+      "colorize"       : "latest"
+    },
+  
+    "devDependencies"  : { 
+      
+    },
+  
+    "bin"              : { 
+      "bend": "./bin/bend"
+    },
+  
+    "lib"              : "./lib",
+    "main"            : "./lib/bender",
+    "version"          : "0.0.1"
+}
