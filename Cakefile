@@ -14,25 +14,13 @@ build = (callback)->
   coffee.on 'exit', (code) ->
     callback?() if code is 0
 
-test = (callback)->
-  mocha = spawn "./node_modules/.bin/mocha", [ 
-    "--reporter", "spec", 
-    "--ui", "bdd", 
-    "--compilers", "coffee:coffee-script", 
-    "--growl", 
-    "--bail", 
-    "--colors",
-    "--require",
-    "should",
-    "--require",
-    "lib/bender"
-  ]
-  mocha.stderr.on 'data', (data) ->
-    process.stderr.write data.toString()
-  mocha.stdout.on 'data', (data) ->
-    print data.toString()
-  mocha.on 'exit', (code) ->
-    callback?() if code is 0
+test = (callback, file = null)->
+  
+  file = test_files().join(' ') if file is null
+  
+  exec "./node_modules/.bin/mocha #{file}", (err, stdout, stderr)->
+    process.stderr.write stderr.toString()
+    print stdout.toString()
 
 task 'build', 'Building source from src/', ->
   build()
@@ -41,16 +29,15 @@ task 'test', 'Run test suite with mocha', ->
   test()
 
 task 'watch', 'Watch source files to compile, test files to run', ->
-  tests  = files("./test/")
-  source = files("./src/")
   banner("Watching Files")
-  warn_missing_tests(source)
-  watch(tests, (file)->
-    logger.info("#green[info] #{file} saved. Running Tests")
+  warn_missing_tests
+  watch(test_files(), (file)->
+    logger.info("#green[info] #{file} saved. Running...")
     test()
   )
-  watch(source, (file)->
-    logger.info("#green[info] #{file} saved. Rebuild.")
+  watch(source_files(), (file)->
+    logger.info("#green[info] #{file} saved. Test and build....")
+    test(find_test(file))
     build()
   )
   
@@ -67,6 +54,9 @@ files =(dir, ret)->
   ret
   
 
+test_files = ()-> files("./test/")
+source_files = ()-> files("./src/")
+
 watch = (files, callback)->
   files.forEach((file)->
     fs.watchFile file, { interval: 100 }, (curr, prev)->
@@ -79,13 +69,15 @@ banner = (text)->
   logger.info("#cyan[Bender] #{props.version}")
   logger.info(text)
   logger.info("-------------------------\n")
-  
-warn_missing_tests = (sources)->
+
+find_test = (source)->
+  basename = path.basename(source, '.coffee')
+  testname = path.join("./test/", "#{basename}.coffee")
+
+warn_missing_tests = ()->
   missing = false
-  sources.forEach (file)->
-    basename = path.basename(file, '.coffee')
-    testname = path.join("./test/", "#{basename}.coffee")
-    unless fs.existsSync(testname)
+  source_files.forEach (file)->
+    unless fs.existsSync(find_test(file))
       logger.info("#yellow[warning] test missing for #{file}")
       missing = true
   logger.info("") if missing is true

@@ -1,5 +1,3 @@
-{Bender, sinon} = require 'test/helper'
-
 describe 'Bender', ()->
   
   it 'exposes a Module property', ()->

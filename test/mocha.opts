@@ -1,0 +1,9 @@
+--require coffee-script
+--reporter spec
+--ui bdd
+--require should
+--require mockti
+--require test/helper.coffee
+--growl
+--bail
+--colors

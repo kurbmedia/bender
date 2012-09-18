@@ -20,13 +20,17 @@
     },
   
     "devDependencies"  : { 
-      
+      "mockti" : "latest"
     },
   
     "bin"              : { 
       "bend": "./bin/bend"
     },
-  
-    "main"            : "./index.js",
+    
+    "scripts": {
+      "test": "./node_modules/.bin/mocha test/*.coffee"
+    },
+    
+    "main"            : "index.js",
     "version"          : "0.0.1"
 }
