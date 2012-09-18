@@ -13,7 +13,10 @@
     "dependencies"     : {
       "underscore"     : "latest",
       "coffee-script"  : "latest",
-      "colorize"       : "latest"
+      "colorize"       : "latest",
+      "mocha"          : ">=1.4.2",
+      "sinon"          : ">=1.4.2",
+      "should"         : ">=1.1.0"
     },
   
     "devDependencies"  : { 
@@ -24,7 +27,6 @@
       "bend": "./bin/bend"
     },
   
-    "lib"              : "./lib",
-    "main"            : "./lib/bender",
+    "main"            : "./index.js",
     "version"          : "0.0.1"
 }
